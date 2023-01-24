@@ -1,11 +1,1 @@
-Road Plan & Brain Storming
-=========================
-This is a collection of ideas and plans for the future of the project. 
-
-1. Is each keyword has a unique corpus that needs to be identified?
-2. What is the response variable imbalance in each category?
-3. How can we get rid of non-dictionary words?
-4. How can we get rid of non-English words?
-5. How to fix the location column?
-6. Some bigrams might signify importance. "fire near", "our deeds", 'shelter place'
-   1. How to extract n-grams?
+## This repository is focusing on solving the Kaggle Competition, ['Natural Language Processing with Disaster Tweets'](https://www.kaggle.com/competitions/nlp-getting-started/overview). Although the competition is considered as an easy start for the beginners to NLP, I will be do my best to develop codes in a more clean and structured way instead of following a quick/messy approach and achieve 100% score. If you see a mistake or areas of improvement, I am open to suggestions and I would be happy to talk.
