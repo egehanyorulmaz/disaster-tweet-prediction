@@ -44,6 +44,19 @@ def preprocessing_text(df):
     return df
 
 
+def standardize_text(df, text_field):
+    """
+    Standardize the text data by removing non-alphabetic characters, urls and mentions
+    """
+    df[text_field] = df[text_field].str.replace(r"http\S+", "")
+    df[text_field] = df[text_field].str.replace(r"http", "")
+    df[text_field] = df[text_field].str.replace(r"@\S+", "")
+    df[text_field] = df[text_field].str.replace(r"[^A-Za-z0-9(),!?@\'\`\"\_\n]", " ")
+    df[text_field] = df[text_field].str.replace(r"@", "at")
+    df[text_field] = df[text_field].str.lower()
+    return df
+
+
 def lemmatize(df):
     """
     Process the text data using nltk library and
@@ -66,7 +79,8 @@ def remove_stopwords(df):
 
 
 df = preprocessing_text(df)
+df = standardize_text(df, 'text')
 df = lemmatize(df)
 df = remove_stopwords(df)
 
-a = 5
+df.to_csv('data/train_preprocessed.csv', index=False)
