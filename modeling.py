@@ -1,15 +1,10 @@
 import pandas as pd
-import numpy as np
-from sklearn.metrics import classification_report
-from sklearn import metrics
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-from prepare_data import Preprocessor
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
-from helpers.basic_models import fit_model
 
+from helpers.basic_models import fit_model
 
 df = pd.read_csv('data/train_preprocessed.csv')
 
