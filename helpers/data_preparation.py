@@ -14,6 +14,8 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+
 
 class Preprocessor:
     def __init__(self):
@@ -103,14 +105,14 @@ class Preprocessor:
             print("Sample of removed words: ", words_to_remove[:10])
 
             # save the words removed to a pickle file
-            with open('data/words_removed.pickle', 'wb') as handle:
+            with open('../data/words_removed.pickle', 'wb') as handle:
                 pickle.dump(words_to_remove, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
             return df
 
         else:
             # test data
-            with open('data/words_removed.pickle', 'rb') as handle:
+            with open('../data/words_removed.pickle', 'rb') as handle:
                 # load the words removed from the training data
                 words_to_remove = pickle.load(handle)
 
@@ -118,11 +120,29 @@ class Preprocessor:
                 lambda x: ' '.join([word for word in x.split() if word not in words_to_remove]))
             return df
 
+    def keyword_one_hot_encoding(self, df):
+        """
+        Modify the keyword column
+        """
+        # apply one-hot encoding to the keyword column
+        enc = OneHotEncoder(handle_unknown='ignore')
+        df['keyword'] = df['keyword'].fillna('no_keyword')
+        df['keyword'] = df['keyword'].apply(lambda t: t.replace('%20', '_'))
+
+        X = list(df['keyword'])
+        X = np.array(X).reshape(-1, 1)
+
+        enc.fit(X)
+        encoded_array = enc.transform(X).toarray()
+
+        encoded_df = pd.DataFrame(encoded_array, columns=enc.categories_[0])
+        return encoded_df
+
 
 class CustomizedProcessor(BaseEstimator, TransformerMixin, Preprocessor):
     def __init__(self, args):
         super().__init__()
-        self.args = args # preprocessing parameters
+        self.args = args  # preprocessing parameters
 
     def fit(self, *_):
         return self
@@ -132,7 +152,15 @@ class CustomizedProcessor(BaseEstimator, TransformerMixin, Preprocessor):
         df = self.standardize_text(df)
         df = self.lemmatize(df)
         df = self.remove_stopwords(df)
-        df = self.remove_less_frequent_words(df, frequency_threshold=self.args['frequency_threshold'], train=self.args['train'])
+        df = self.remove_less_frequent_words(df, frequency_threshold=self.args['frequency_threshold'],
+                                             train=self.args['train'])
+        df = df.fillna('no_value')
+        # change np.nan to 'no_value' for keyword column
+        df['keyword'] = df['keyword'].fillna('no_value')
+        df['keyword'] = df['keyword'].apply(lambda t: t.replace('%20', '_'))
+
+        # encoded_df = self.keyword_one_hot_encoding(df)
+        # df = df.join(encoded_df)
         return df
 
 
@@ -141,3 +169,29 @@ def preprocessing_pipeline(args):
     Preprocessing pipeline
     """
     return Pipeline(steps=[('preprocessor', CustomizedProcessor(args))])
+
+
+if __name__ == '__main__':
+    args = {
+        'frequency_threshold': 750,
+        'train': True
+    }
+    print("Arguments: ", args)
+    df = pd.read_csv('../data/train.csv')
+    print('Preprocessing the data...')
+    preprocessor = preprocessing_pipeline(args)
+    df = preprocessor.fit_transform(df)
+    df.to_csv('../data/train_preprocessed.csv', index=False)
+
+    ## processing test data
+    args = {
+        'frequency_threshold': 750,
+        'train': False
+    }
+    print("Arguments: ", args)
+    df = pd.read_csv('../data/test.csv')
+    print('Preprocessing the data...')
+    preprocessor = preprocessing_pipeline(args)
+    df = preprocessor.fit_transform(df)
+    df.to_csv('../data/test_preprocessed.csv', index=False)
+    print("Preprocessing done!")
