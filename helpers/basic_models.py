@@ -6,16 +6,19 @@ from sklearn.naive_bayes import MultinomialNB
 import pandas as pd
 
 
-def fit_model(model, count_vectorizer, X_train, X_test, y_train, y_test, get_feature_importance=True):
+def fit_model(model, count_vectorizer, X_train, X_test, y_train, y_test, column='text', get_feature_importance=True):
     print("Model inputs are: ")
     print(count_vectorizer)
     print(model)
     print("Fitting the Count Vectorizer")
-    count_vectorizer.fit(X_train)
+    count_vectorizer.fit(X_train[column])
 
-    X_train_dtm = count_vectorizer.fit_transform(X_train)
-    X_test_dtm = count_vectorizer.transform(X_test)
-    print("CountVectorizer is successfuly fitted for train and test data!")
+    X_train_dtm = count_vectorizer.transform(X_train[column])
+    X_test_dtm = count_vectorizer.transform(X_test[column])
+    print("CountVectorizer is successfully fitted for train and test data!")
+
+    X_train_dtm = pd.DataFrame(X_train_dtm.toarray(), columns=count_vectorizer.get_feature_names_out())
+    X_test_dtm = pd.DataFrame(X_test_dtm.toarray(), columns=count_vectorizer.get_feature_names_out())
 
     model.fit(X_train_dtm, y_train)
     y_pred_class = model.predict(X_test_dtm)
