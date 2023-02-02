@@ -159,6 +159,10 @@ class CustomizedProcessor(BaseEstimator, TransformerMixin, Preprocessor):
         df['keyword'] = df['keyword'].fillna('no_value')
         df['keyword'] = df['keyword'].apply(lambda t: t.replace('%20', '_'))
 
+        # change np.nan to 'no_value' for text column
+        df['text'] = df['text'].fillna('no_value')
+        df['text'] = df['text'].apply(lambda t: t.replace('%20', '_'))
+
         # encoded_df = self.keyword_one_hot_encoding(df)
         # df = df.join(encoded_df)
         return df
