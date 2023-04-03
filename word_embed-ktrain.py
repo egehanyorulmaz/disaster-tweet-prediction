@@ -37,12 +37,4 @@ learner.fit_onecycle(lr=2e-5, epochs=1, verbose=1,
 predictor = ktrain.get_predictor(learner.model, preproc)
 predictor.save('models/bert')
 
-# Load the model
-predictor = ktrain.load_predictor('models/bert')
 
-# Predict
-predictor.predict('I am happy')
-
-# Evaluate the model
-data = ['I am happy', 'I am sad']
-predictor.predict(data)
