@@ -10,6 +10,7 @@ This is a project to classify disaster-related tweets as disaster or non-disaste
 
 The project contains two datasets, train.csv and test.csv, which contain the tweet data. The helpers directory contains the code for data preparation and the implementation of machine learning models. The data_prepation.py script preprocesses the data, which involves removing URLs, mentions, stop words, and lemmatizing the text. The modeling.py script contains code to train the base models & ensembles to improve the predictions further. This script fits the CountVectorizer to the text data and trains a Naive Bayes and a Logistic Regression model. The basic_models.py script contains the code to fit the machine learning models. Finally, the word_embed-ktrain.py script uses the Ktrain library to train a BERT model to classify the tweets. Also, I used chatgpt-3.5turbo api to classify the tweets, and this approach performed poorly compared to the ktrain-bert approach. 
 
-##Conclusion
+
+## Conclusion
 
 The project successfully classifies the disaster-related tweets into disaster or non-disaster using NLP techniques and machine learning models. The F1 score is used to evaluate the models, and the best model has an F1 score of ~0.83
