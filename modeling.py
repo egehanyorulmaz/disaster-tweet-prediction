@@ -42,10 +42,10 @@ count_vectorizer3, logreg2 = fit_model(logreg2, count_vec3,
                                        get_feature_importance=True)
 
 # save the model
-save_model(count_vectorizer1, '/models/count_vectorizer1.pkl')
-save_model(count_vectorizer2, '/models/count_vectorizer2.pkl')
-save_model(count_vectorizer3, '/models/count_vectorizer3.pkl')
-save_model(logreg, '/models/logreg.pkl')
-save_model(logreg2, '/models/logreg2.pkl')
-save_model(nb, '/models/nb.pkl')
+save_model(count_vectorizer1, 'models/count_vectorizer1.pkl')
+save_model(count_vectorizer2, 'models/count_vectorizer2.pkl')
+save_model(count_vectorizer3, 'models/count_vectorizer3.pkl')
+save_model(logreg, 'models/logreg.pkl')
+save_model(logreg2, 'models/logreg2.pkl')
+save_model(nb, 'models/nb.pkl')
 print('Models are successfully saved.')
